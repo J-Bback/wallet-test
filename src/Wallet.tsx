@@ -15,6 +15,7 @@ import React, { FC, useCallback, useMemo } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { Navigation } from './Navigation';
 import { Notification } from './Notification';
+import { HomeView } from './HomeView';
 
 export const Wallet: FC = () => {
     // Can be set to 'devnet', 'testnet', or 'mainnet-beta'
@@ -55,6 +56,7 @@ export const Wallet: FC = () => {
             <WalletProvider wallets={wallets} onError={onError} autoConnect>
                 <WalletModalProvider>
                     <Navigation />
+                    <HomeView />
                 </WalletModalProvider>
                 <Toaster position="bottom-left" reverseOrder={false} />
             </WalletProvider>

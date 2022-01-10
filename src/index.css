@@ -18,6 +18,12 @@ nav {
     background: #2c2d30;
 }
 
+main {
+    align-items: center;
+    justify-content: center;
+    padding: 0 2rem;
+}
+
 nav > div {
     display: flex;
 }
