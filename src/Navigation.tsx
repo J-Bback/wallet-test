@@ -1,7 +1,8 @@
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletDisconnectButton, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import React, { FC } from 'react';
-import Home from './Home';
+// import { HomeView } from './'
+// import { HomeView } from './'
 
 export const Navigation: FC = () => {
     const { wallet } = useWallet();
@@ -10,7 +11,7 @@ export const Navigation: FC = () => {
         <nav>
             <h1>Solana Starter App</h1>
             <div>
-                <Home />
+                {/* <Home /> */}
             </div>
             <div>
                 <WalletMultiButton />
