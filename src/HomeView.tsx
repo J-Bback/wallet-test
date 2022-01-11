@@ -37,31 +37,25 @@ export const HomeView: FC = ({}) => {
 
     const setAirdrop = async () => {
     const connection = new web3.Connection(web3.clusterApiUrl('devnet'),'confirmed');
-    if (publicKey) {
+    if (!publicKey) throw new WalletNotConnectedError();    
       let airdropSignature = await connection.requestAirdrop(publicKey, Number(amount) * (10 ** 9));
-      console.log('airdropSignature', airdropSignature);
       await connection.confirmTransaction(airdropSignature);
-      // connection.close();
-    }
+      window.location.reload();
   }
 
     const setSendSol = async () => {
-      const connection = new web3.Connection(web3.clusterApiUrl('devnet'),'confirmed');
-
       if (!publicKey) throw new WalletNotConnectedError();    
       const transaction = new web3.Transaction().add(
         web3.SystemProgram.transfer({
           fromPubkey: publicKey,
           toPubkey: new web3.PublicKey(receiver),
-          lamports: Number(sendAmount)
+          lamports: Number(sendAmount) * (10 ** 9)
         })
       );
-
       const signature = await sendTransaction(transaction, connection);
       await connection.confirmTransaction(signature, 'processed');
+      window.location.reload();
     };
-
-  console.log('receiverBalance', receiverBalance);
 	return (
 		<main>
 			<p>{publicKey ? <>Your address: {publicKey.toBase58()}</> : null}</p>
