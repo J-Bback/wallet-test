@@ -7,90 +7,85 @@ import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 
 export const HomeView: FC = ({}) => {
-	// const treasury = new anchor.web3.PublicKey('3scBXUWsTyxQ9LiZSVdFu4RdmMQntt1eicMtkxbVWqbZ'!);
-	// console.log('treasury', treasury);
 	const wallet = useAnchorWallet();
 	const { publicKey } = useWallet();
-  const { connection } = useConnection();
-  
-  const [balance, setBalance] = useState<number>();
-  const [amount, setAmount] = useState('');
-  const [sendAmount, setSendAmount] = useState('');
+	const { connection } = useConnection();
 
-  const [receiver, setReceiver] = useState('3scBXUWsTyxQ9LiZSVdFu4RdmMQntt1eicMtkxbVWqbZ');
-  const [receiverBalance, setReceiverBalance] = useState<number>();
+	const [balance, setBalance] = useState<number>();
+	const [amount, setAmount] = useState("");
+	const [sendAmount, setSendAmount] = useState("");
 
+	const [receiver, setReceiver] = useState(
+		"3scBXUWsTyxQ9LiZSVdFu4RdmMQntt1eicMtkxbVWqbZ"
+	);
+	const [receiverBalance, setReceiverBalance] = useState<number>();
 
 	useEffect(() => {
 		(async () => {
 			if (wallet) {
 				const balance = await connection.getBalance(wallet.publicKey);
-        setBalance(balance / LAMPORTS_PER_SOL);
-        if (receiver) {
-          const receiverPubkey = new anchor.web3.PublicKey(receiver);
-          const receiverBalance = await connection.getBalance(receiverPubkey);
-          setReceiverBalance(receiverBalance / LAMPORTS_PER_SOL);
-        }
+				setBalance(balance / LAMPORTS_PER_SOL);
+				if (receiver) {
+					const receiverPubkey = new anchor.web3.PublicKey(receiver);
+					const receiverBalance = await connection.getBalance(receiverPubkey);
+					setReceiverBalance(receiverBalance / LAMPORTS_PER_SOL);
+				}
 			}
 		})();
-  }, [wallet, connection]);
+	}, [wallet, connection]);
 
-    const setAirdrop = async () => {
-    const connection = new web3.Connection(web3.clusterApiUrl('devnet'),'confirmed');
-    if (publicKey) {
-      let airdropSignature = await connection.requestAirdrop(publicKey, Number(amount) * (10 ** 9));
-      console.log('airdropSignature', airdropSignature);
-      await connection.confirmTransaction(airdropSignature);
-      // connection.close();
-    }
-  }
+	const setAirdrop = async () => {
+		if (publicKey) {
+			let airdropSignature = await connection.requestAirdrop(
+				publicKey,
+				Number(amount) * 10 ** 9
+			);
+			await connection.confirmTransaction(airdropSignature);
+		}
+	};
 
-    const setSendSol = async () => {
-    // const connection = new web3.Connection(web3.clusterApiUrl('devnet'),'confirmed');
-    // 여기서 실패.. 어떻게 키페어를 가져와야될까
-    console.log('connection', connection);
-    const keyPair = anchor.web3.Keypair.generate();
-    console.log('keyPair', keyPair);
-    const receiverPubkey = new anchor.web3.PublicKey(receiver);
-    let transaction = new web3.Transaction();
+	const setSendSol = async () => {
+		const keyPair = anchor.web3.Keypair.generate();
+		console.log("keyPair", keyPair);
+		const receiverPubkey = new anchor.web3.PublicKey(receiver);
+		let transaction = new web3.Transaction();
 
-    // Add an instruction to execute
-    // transaction.add(web3.SystemProgram.transfer({
-    //     fromPubkey: payer.publicKey,
-    //     toPubkey: toPublicKey,
-    //     lamports: this.state.amount,
-    // }));
+		// Add an instruction to execute
+		// transaction.add(web3.SystemProgram.transfer({
+		//     fromPubkey: payer.publicKey,
+		//     toPubkey: toPublicKey,
+		//     lamports: this.state.amount,
+		// }));
 
-    // await web3.sendAndConfirmTransaction(connection, transaction, [payer])
+		// await web3.sendAndConfirmTransaction(connection, transaction, [payer])
+	};
 
-    // connection.close()
-  }
-
-  console.log('receiverBalance', receiverBalance);
 	return (
 		<main>
 			<p>{publicKey ? <>Your address: {publicKey.toBase58()}</> : null}</p>
 			{wallet && <p>Balance(Sol): {(balance || 0).toLocaleString()}</p>}
 			<form>
 				<input
-          name={'Airdrop'}
-					placeholder='airdrop input'
-          value={amount}
-          onChange={e => setAmount(e.target.value)}
+					name={"Airdrop"}
+					placeholder="airdrop input"
+					value={amount}
+					onChange={(e) => setAmount(e.target.value)}
 				/>
 				<input type="button" onClick={setAirdrop} value="airdrop" />
 			</form>
 			<form>
 				<input
-          name={'Send'}
-					placeholder='send input'
-          value={sendAmount}
-          onChange={e => setSendAmount(e.target.value)}
+					name={"Send"}
+					placeholder="send input"
+					value={sendAmount}
+					onChange={(e) => setSendAmount(e.target.value)}
 				/>
 				<input type="button" onClick={setSendSol} value="send" />
 			</form>
-      <p>{receiver ? <>Receiver address: {receiver}</> : null}</p>
-			{receiver && <p>Receiver Balance(Sol): {(receiverBalance || 0).toLocaleString()}</p>}
+			<p>{receiver ? <>Receiver address: {receiver}</> : null}</p>
+			{receiver && (
+				<p>Receiver Balance(Sol): {(receiverBalance || 0).toLocaleString()}</p>
+			)}
 		</main>
 	);
 };
