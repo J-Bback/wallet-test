@@ -1,16 +1,7 @@
-# 소개 영상
-
-
+## 소개 영상
 https://user-images.githubusercontent.com/68371757/152279238-3994e2d4-72f4-47e2-81a3-fe36f005695c.mov
 
-## Available Scripts
+#### 목적 : 웹사이트에 지갑을 연동해서 SOL토큰 전송 및 수신 트랜잭션을 확인한다.
 
-In the project directory, you can run:
-
-### `npm start` or `yarn start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Reference
+https://github.com/solana-labs/wallet-adapter
